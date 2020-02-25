@@ -10,25 +10,36 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.leaderboard_entry.view.*
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var leaderboardDB: DatabaseReference
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        leaderboardDB = FirebaseDatabase.getInstance().reference.child("leaderboard")
 
         leaderboard.layoutManager = LinearLayoutManager(this)
 
         val user = FirebaseAuth.getInstance().currentUser
 
         val entries = listOf(
-            LeaderboardEntry("Sebastian", 12),
+            LeaderboardEntry("user@test.com", 12),
             LeaderboardEntry("Lucas", 25),
             LeaderboardEntry("Fausto", 52)
         )
+
+        entries.forEach {
+            val key = leaderboardDB.push().key
+            key ?: return
+
+            leaderboardDB.child(key).setValue(it)
+        }
 
         leaderboard.adapter = LeaderboardAdapter(entries, this)
 

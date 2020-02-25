@@ -17,30 +17,36 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/status">
 
         <ImageView
             android:id="@+id/left_slot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/cherries"/>
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/middle_slot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/cherries" />
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/right_slot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:src="@drawable/cherries" />
+            android:layout_weight="1"/>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/status"
+        android:gravity="center"
+        android:textSize="18dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/center_guideline"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -50,18 +56,21 @@
         app:layout_constraintTop_toTopOf="@id/center_guideline">
 
         <Button
+            android:id="@+id/play_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/play"
             android:layout_marginBottom="10dp"/>
 
         <Button
+            android:id="@+id/leaderboard_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/leaderboard"
             android:layout_marginBottom="10dp"/>
 
         <Button
+            android:id="@+id/logout_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/logout"/>
