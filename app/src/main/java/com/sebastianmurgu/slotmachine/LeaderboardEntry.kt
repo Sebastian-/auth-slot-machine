@@ -1,3 +1,5 @@
 package com.sebastianmurgu.slotmachine
 
-data class LeaderboardEntry (val name: String, val score: Int)
+// must define default values in order to cast database data into the object
+//(eg. see SlotMachineActivity saveScore function)
+data class LeaderboardEntry (var username: String = "", var score: Int = 0)

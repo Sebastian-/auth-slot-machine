@@ -10,38 +10,42 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.leaderboard_entry.view.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var leaderboardDB: DatabaseReference
+    private lateinit var database: DatabaseReference
+    private var leaderboardEntries: MutableList<LeaderboardEntry> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        leaderboardDB = FirebaseDatabase.getInstance().reference.child("leaderboard")
+        database = FirebaseDatabase.getInstance().reference
 
         leaderboard.layoutManager = LinearLayoutManager(this)
-
         val user = FirebaseAuth.getInstance().currentUser
 
-        val entries = listOf(
-            LeaderboardEntry("user@test.com", 12),
-            LeaderboardEntry("Lucas", 25),
-            LeaderboardEntry("Fausto", 52)
-        )
+        database.child("scores").orderByChild("score").addValueEventListener(object: ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
 
-        entries.forEach {
-            val key = leaderboardDB.push().key
-            key ?: return
+            override fun onDataChange(p0: DataSnapshot) {
+                leaderboardEntries = mutableListOf()
+                p0.children.reversed().forEach {
+                    val entry = it.getValue(LeaderboardEntry::class.java)
+                    if (entry != null) {
+                        leaderboardEntries.add(entry)
+                    }
+                }
 
-            leaderboardDB.child(key).setValue(it)
-        }
+                update()
+            }
 
-        leaderboard.adapter = LeaderboardAdapter(entries, this)
+        })
+
 
         play_button.setOnClickListener {
            if (user != null) {
@@ -53,6 +57,10 @@ class MainActivity : AppCompatActivity() {
 
 //        var database = FirebaseDatabase.getInstance().reference
 //        database.child("messages").setValue("Hello World")
+    }
+
+    private fun update() {
+        leaderboard.adapter = LeaderboardAdapter(leaderboardEntries, this)
     }
 
     private class LeaderboardAdapter(val entries: List<LeaderboardEntry>, val context: Context): RecyclerView.Adapter<LeaderboardViewHolder>() {
@@ -67,7 +75,7 @@ class MainActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: LeaderboardViewHolder, position: Int) {
             val entry = entries[position]
 
-            holder.itemView.player_name.text = entry.name
+            holder.itemView.player_name.text = entry.username
             holder.itemView.player_score.text = entry.score.toString()
         }
     }
