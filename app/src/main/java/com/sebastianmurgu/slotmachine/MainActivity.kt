@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         play_button.setOnClickListener {
            if (user != null) {
-                // logged in, send to game
+               startActivity(Intent(this, SlotMachineActivity::class.java))
            } else {
                startActivity(Intent(this, AuthSelectionActivity::class.java))
            }
