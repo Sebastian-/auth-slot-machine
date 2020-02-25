@@ -1,6 +1,7 @@
 package com.sebastianmurgu.slotmachine
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.leaderboard_entry.view.*
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
         leaderboard.layoutManager = LinearLayoutManager(this)
 
+        val user = FirebaseAuth.getInstance().currentUser
+
         val entries = listOf(
             LeaderboardEntry("Sebastian", 12),
             LeaderboardEntry("Lucas", 25),
@@ -27,6 +31,14 @@ class MainActivity : AppCompatActivity() {
         )
 
         leaderboard.adapter = LeaderboardAdapter(entries, this)
+
+        play_button.setOnClickListener {
+           if (user != null) {
+                // logged in, send to game
+           } else {
+               startActivity(Intent(this, AuthSelectionActivity::class.java))
+           }
+        }
 
 //        var database = FirebaseDatabase.getInstance().reference
 //        database.child("messages").setValue("Hello World")

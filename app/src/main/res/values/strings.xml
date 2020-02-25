@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">SlotMachine</string>
     <string name="play">Play</string>
-    <string name="main_title">SLOTS LEADERBOARD</string>
+    <string name="login">Log In</string>
+    <string name="register">Register</string>
+    <string name="main_title">LEADERBOARD</string>
+    <string name="auth_email">Email</string>
+    <string name="auth_password">Password</string>
 </resources>
